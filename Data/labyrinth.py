@@ -66,7 +66,6 @@ class Labyrinth:
         for ligne in self.structure:
             case = 0
             for sprite in ligne:
-                sprite_list = {}
                 y = case * constants.sprite_size
                 x = line * constants.sprite_size
                 if sprite == 'w':
@@ -81,7 +80,5 @@ class Labyrinth:
                     window.blit(guardian, (y, x))
                 elif sprite == 'T':
                     window.blit(toilet_tube, (y, x))
-                sprite_list = ([(y, x), sprite])
                 case += 1
             line += 1
-            print(len(sprite_list))
