@@ -19,17 +19,17 @@ class Labyrinth:
         with open("Data/draw_file", 'r') as labyrinth:
             self.structure = [[letter for letter in line if letter != "\n"] for line in labyrinth]
         
-    def rand_free_tile(self):
+    def place_object_in_maze(self):
         """
-        Find a free tile to place the items
+        Find a random free position to place the items in the maze
         """
-        rand_line = randint(0, len(self.structure) -1)
-        rand_tile = randint(0, len(self.structure[rand_line]) -1)
-        rand_free_tile = self.structure[rand_line][rand_tile]
-        while rand_free_tile != " ":
-            rand_tile = randint(0, len(self.structure[rand_line]) -1)
-            rand_free_tile = self.structure[rand_line][rand_tile]
-        return rand_line, rand_tile
+        random_line = randint(0, len(self.structure) -1)
+        random_tile = randint(0, len(self.structure[random_line]) -1)
+        place_object_in_maze = self.structure[random_line][random_tile]
+        while place_object_in_maze != " ":
+            random_tile = randint(0, len(self.structure[random_line]) -1)
+            place_object_in_maze = self.structure[random_line][random_tile]
+        return random_line, random_tile
 
     def chara_s_position(self):
         """

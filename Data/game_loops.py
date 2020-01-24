@@ -84,9 +84,9 @@ class GameLoops: # Définition de la classe de jeu principal
         lab.lab_display(self.window)                                                # Affichage du labyrinth
         Mac = Character("Mac", lab.structure, lab.chara_s_position())               # Var == Class Character
         guardian = Guardian("Guardian", lab.structure, lab.guardian_s_position())    # Var == Class Guardian
-        needle = Item("Needle", lab.structure, lab.rand_free_tile())            # Item #1 position aléatoire
-        alcohol = Item("Alcohol", lab.structure, lab.rand_free_tile())          # Item #2 position aléatoire
-        toilet_tube = Item("Toilet_tube", lab.structure, lab.rand_free_tile())  # Item #3 position aléatoire
+        needle = Item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
+        alcohol = Item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
+        toilet_tube = Item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
 
         
         # La valeur de self.home.loop == False est connue grâce à home_loops()
