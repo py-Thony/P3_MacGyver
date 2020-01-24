@@ -31,23 +31,13 @@ class Labyrinth:
             place_object_in_maze = self.structure[random_line][random_tile]
         return random_line, random_tile
 
-    def chara_s_position(self):
+    def character_position(self, chara_letter):
         """
-        Find the Departure tile to place Macgyver
+        Find the Departure tile to place Macgyver and Finish tile to place Guardian
         """           
         for y, line in enumerate(self.structure):
             for x, letter in enumerate(line):
-                if self.structure[y][x] == "D":
-                    position = y, x
-                    return position
-    
-    def guardian_s_position(self):
-        """
-        Find the Arrived tile to place the guardian
-        """
-        for y, line in enumerate(self.structure):
-            for x, letter in enumerate(line):
-                if self.structure[y][x] == "A":
+                if self.structure[y][x] == chara_letter:
                     position = y, x
                     return position
 

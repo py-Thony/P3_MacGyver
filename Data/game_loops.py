@@ -82,8 +82,8 @@ class GameLoops: # Définition de la classe de jeu principal
         loose_img = pygame.image.load(Data.constants.youloose_img).convert_alpha()  # Background (game over)
         lab = Labyrinth()                                                           # Var == Class Labyrinth
         lab.lab_display(self.window)                                                # Affichage du labyrinth
-        Mac = Character("Mac", lab.structure, lab.chara_s_position())               # Var == Class Character
-        guardian = Guardian("Guardian", lab.structure, lab.guardian_s_position())    # Var == Class Guardian
+        Mac = Character("Mac", lab.structure, character_position("D"))               # Place Character
+        guardian = Guardian("Guardian", lab.structure, character_position("A"))    # Place Guardian
         needle = Item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
         alcohol = Item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
         toilet_tube = Item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
