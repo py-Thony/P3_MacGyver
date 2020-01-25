@@ -6,7 +6,7 @@ from Data.constants import numb_sprites_side, sprite_size, mac_img, one_item_img
 class Character:
     """
     Class to create the characters whith name,
-    initial position, valid mooves and catch items.
+    initial position, valid moves and catch items.
     """
      
     def __init__(self, name, structure, position):
@@ -22,7 +22,7 @@ class Character:
         self.x = self.case_x * sprite_size
         self.y = self.case_y * sprite_size
         
-    def moove(self, direction):
+    def move(self, direction):
 
         if direction == "right":           
             if self.case_y < (numb_sprites_side - 1):

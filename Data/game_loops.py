@@ -109,13 +109,13 @@ class GameLoops: # Définition de la classe de jeu principal
                         self.game_loop = False
                         self.home_loop = True
                     elif event.key == K_DOWN:
-                        Mac.moove('right')
+                        Mac.move('right')
                     elif event.key == K_UP:
-                        Mac.moove('left')
+                        Mac.move('left')
                     elif event.key == K_LEFT:
-                        Mac.moove('up')
+                        Mac.move('up')
                     elif event.key == K_RIGHT:
-                        Mac.moove('down')
+                        Mac.move('down')
             pygame.display.flip() # Rafraichissement de la fenêtre
 
             if lab.structure[Mac.case_y][Mac.case_x] == "G": # Quand Mac rencontre le gardien
