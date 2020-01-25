@@ -74,6 +74,7 @@ class Character:
             self.sound_catch_item = pygame.mixer.Sound("sound/ALL_ITEMS.wav")
         else:
             self.sound_catch_item = pygame.mixer.Sound("sound/CATCH_ITEM.wav")
+        self.sound_catch_item.set_volume(.2)
         self.sound_catch_item.play()
 
     def catch_item(self, window):

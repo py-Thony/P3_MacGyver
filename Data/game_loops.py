@@ -44,7 +44,7 @@ class GameLoops: # Définition de la classe de jeu principal
         # Réglage du volume à la baisse (Musique d'origine trop forte)
         pygame.mixer.music.set_volume(.1)
         self.sound = pygame.mixer.music.load("sound/Mac.wav")                      # Musique d'accueil
-        pygame.mixer.music.set_volume(.5)
+        pygame.mixer.music.set_volume(.3)
         self.sound = pygame.mixer.music.play() 
         while self.home_loop:                                         # Tant que home_loop == True
             
@@ -123,15 +123,13 @@ class GameLoops: # Définition de la classe de jeu principal
             pygame.display.flip() # Rafraichissement de la fenêtre
 
             if lab.structure[Mac.case_y][Mac.case_x] == "G": # Quand Mac rencontre le gardien
-                # Réglage du volume à la baisse (Musique d'origine trop forte)
-                pygame.mixer.music.set_volume(.1)
                 self.game_loop = False # Fin de la boucle de jeu
                 pygame.mixer.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
                 if len(Mac.backpack) == 3: # Test de la récupération des 3 Items
                     win = True # Victoire est "vraie" si les Items sont collectés
                     self.sound_win = pygame.mixer.music.load("sound/win.wav")              # Musique Game Over
-                    pygame.mixer.music.set_volume(.7)
-                    self.sound_game = pygame.mixer.music.play()  
+                    pygame.mixer.music.set_volume(.2)
+                    pygame.mixer.music.play()  
                     while win: # Dans le cas de victoire                            
                         self.window.blit(win_img, (0, 0)) # Collage de l'image de victoire
                         self.window.blit(backpack_win, (0, 600))
@@ -144,13 +142,10 @@ class GameLoops: # Définition de la classe de jeu principal
                                 if event.key == K_ESCAPE:
                                     win = False
                 elif len(Mac.backpack) != 3: # Dans le cas où les Items ne sont pas tous récupérés
-                    # Réglage du volume à la baisse (Musique d'origine trop forte)
-                    pygame.mixer.music.set_volume(.1)
-                    self.sound.stop() # Arrêt de la musique
                     loose = True # Activation scénario défaite
                     self.sound_loose = pygame.mixer.music.load("sound/loose.wav")              # Musique Game Over
-                    pygame.mixer.music.set_volume(.7)
-                    self.sound_game = pygame.mixer.music.play()
+                    pygame.mixer.music.set_volume(.2)
+                    pygame.mixer.music.play()
                     while loose: # Si défaite...
                         self.window.blit(loose_img, (0, 0)) # Collage de l'image de défaite
                         self.window.blit(backpack_loose, (0, 600))
