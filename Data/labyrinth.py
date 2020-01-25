@@ -10,7 +10,7 @@ class Labyrinth:
     """
     This class is to initialize the game board
     from the file "structure" wich contains the structure of the labyrinth,
-    and chose ramdomly a free space on the structure
+    and choose ramdomly a free space on the structure
     """
 
     def __init__(self):
@@ -51,19 +51,32 @@ class Labyrinth:
                     position = y, x
                     return position
 
+    def item(self, name, structure, position):
+        """
+        Creation of items
+        """
+        self.name = name
+        self.position = position
+        self.structure = structure
+        self.case_y = position[0]
+        self.case_x = position[1]
+        self.structure[self.case_y][self.case_x] = name[0]
+        
     def lab_display(self, window):
         """
         This method loads the images from "constants" and place them on structure
         """
-        
+        # convert needed pics
         wall = pygame.image.load(constants.WALL_IMG).convert_alpha()
         departure = pygame.image.load(constants.departure_img).convert_alpha()
         needle = pygame.image.load(constants.needle_img).convert_alpha()
         alcohol = pygame.image.load(constants.alcohol_img).convert_alpha()
         guardian = pygame.image.load(constants.guardian_img).convert_alpha()
-        toilet_tube = pygame.image.load(constants.toilet_tube_img).convert_alpha()        
+        toilet_tube = pygame.image.load(constants.toilet_tube_img).convert_alpha()
+        # line's counter init      
         line = 0
         for ligne in self.structure:
+            # case's counter init
             case = 0
             for sprite in ligne:
                 y = case * constants.sprite_size

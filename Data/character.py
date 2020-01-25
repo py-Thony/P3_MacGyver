@@ -7,6 +7,8 @@ class Character:
     """
     Class to create the characters whith name,
     initial position, valid moves and catch items.
+    Je réutilise cette classe pour positionner mes Items afin de ne pas créer une classe spécialement
+    pour leur positionnement. (Une classe n'est justifiée que par sa "multi" utilisation dans un programme)
     """
      
     def __init__(self, name, structure, position):

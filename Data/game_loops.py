@@ -5,7 +5,7 @@ import Data.constants
 from Data.labyrinth import Labyrinth
 from Data.character import Character
 #from Data.guardian import Guardian
-from Data.item import Item
+#from Data.item import Item
 
 pygame.init() # Initialisation du module Pygame
 
@@ -87,9 +87,9 @@ class GameLoops: # Définition de la classe de jeu principal
         lab.lab_display(self.window)                                                # Affichage du labyrinth
         Mac = Character("Mac", lab.structure, lab.character_position("D"))      #Place MacGyver
         Guardian = Character("Guardian", lab.structure, lab.character_position("A"))    # Place Guardian
-        needle = Item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
-        alcohol = Item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
-        toilet_tube = Item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
+        needle = lab.item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
+        alcohol = lab.item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
+        toilet_tube = lab.item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
 
         
         # La valeur de self.home.loop == False est connue grâce à home_loops()
@@ -112,6 +112,7 @@ class GameLoops: # Définition de la classe de jeu principal
                     if event.key == K_ESCAPE:
                         self.game_loop = False
                         self.home_loop = True
+                    # mouvements avec les flèches clavier
                     elif event.key == K_DOWN:
                         Mac.move('right')
                     elif event.key == K_UP:
@@ -128,7 +129,7 @@ class GameLoops: # Définition de la classe de jeu principal
                 if len(Mac.back_pack) == 3: # Test de la récupération des 4 Items
                     win = True # Victoire est "vraie" si les Items sont collectés
                     self.sound_win.play() # Jouer le son de victoire
-                    self.sound_win.set_volume(.09)
+                    self.sound_win.set_volume(.09) # Réglage du volume sur "audible mais pas trop"
                     while win: # Dans le cas de victoire                            
                         self.window.blit(win_img, (0, 0)) # Collage de l'image de victoire
                         self.window.blit(backpack_win, (0, 600))
@@ -144,7 +145,7 @@ class GameLoops: # Définition de la classe de jeu principal
                     self.sound.stop() # Arrêt de la musique
                     loose = True # Activation scénario défaite
                     self.sound_loose.play() # Jouer le son de la défaite ( Sorti de la boucle)
-                    self.sound_loose.set_volume(.09)
+                    self.sound_loose.set_volume(.09) # Réglage du volume sur "audible mais pas trop"
                     while loose: # Si défaite...
                         self.window.blit(loose_img, (0, 0)) # Collage de l'image de défaite
                         self.window.blit(backpack_loose, (0, 600))
@@ -152,7 +153,6 @@ class GameLoops: # Définition de la classe de jeu principal
                         for event in pygame.event.get(): # Possibilité de quitter....
                             if event.type == QUIT:
                                 loose = False
-                                play = 0
                             elif event.type == KEYDOWN or event.type == KEYUP:
                                 # Echap pour quitter
                                 if event.key == K_ESCAPE:

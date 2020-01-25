@@ -1,3 +1,5 @@
+
+
 """
 GAME Constants
 Variables nécessaires au calcul de la fenêtre
