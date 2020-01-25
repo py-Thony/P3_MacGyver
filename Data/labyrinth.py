@@ -7,18 +7,28 @@ import Data.constants as constants
 
 class Labyrinth:
 
+    """
+    This class is to initialize the game board
+    from the file "structure" wich contains the structure of the labyrinth,
+    and chose ramdomly a free space on the structure
+    """
+
     def __init__(self):
-        """
-        This method is to initialize the game board
-        from the file "structure" wich contains the structure of the labyrinth,
-        and chose ramdomly a free space on the structure
-        """
+
         # Read the file "structure" and save the structure of the labyrinth
         # as a list in structure []
-
-        with open("Data/draw_file", 'r') as labyrinth:
+        # With open == open file and auto-close
+        with open("Data/draw_file", 'r') as labyrinth: # ,"r" == open for reading, no writing
+           
+            """
+            Optimized according to Gérard Swinnen's book. This replaces 2 for loops
+            
+            for line in labyrinth to create a list of lines
+            for letter in line to create a list of letters (ignoring end of line characters)
+            """
             self.structure = [[letter for letter in line if letter != "\n"] for line in labyrinth]
-        
+
+
     def place_object_in_maze(self):
         """
         Find a random free position to place the items in the maze

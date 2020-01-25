@@ -3,8 +3,8 @@ import pygame
 from pygame.locals import *
 import Data.constants
 from Data.labyrinth import Labyrinth
-from Data.hero import Character
-from Data.guardian import Guardian
+from Data.character import Character
+#from Data.guardian import Guardian
 from Data.item import Item
 
 pygame.init() # Initialisation du module Pygame
@@ -28,6 +28,8 @@ class GameLoops: # Définition de la classe de jeu principal
         pygame.display.set_caption(Data.constants.Title)       # Affichage du titre de la fenêtre
         pygame.key.set_repeat(400, 30)
         self.sound = pygame.mixer.Sound("sound/Mac.wav")                      # Musique d'accueil
+        # Réglage du volume à la baisse (Musique d'origine trop forte)
+        self.sound.set_volume(.1)
         self.sound_game = pygame.mixer.Sound("sound/game.wav")            # Musique du labyrinthe
         self.sound_loose = pygame.mixer.Sound("sound/loose.wav")              # Musique Game Over
         self.sound_win = pygame.mixer.Sound("sound/win.wav")                   # Musique victoire
@@ -49,8 +51,9 @@ class GameLoops: # Définition de la classe de jeu principal
             
             self.window.blit(HOME_PIC, (0, 0))                        # Collage de l'image de fond
             self.window.blit(backpack_start, (0, 600))
-            self.sound.play()                                   # Activation de la musique de fond
-            
+            self.sound.set_volume(.05)
+            self.sound.play()                            # Activation de la musique de fond
+
             for event in pygame.event.get():             # Pour tout évennement détecté par Pygame
                 
                 if event.type == QUIT:       # Si l'évennement est un clic sur la croix de fenêtre
@@ -82,8 +85,8 @@ class GameLoops: # Définition de la classe de jeu principal
         loose_img = pygame.image.load(Data.constants.youloose_img).convert_alpha()  # Background (game over)
         lab = Labyrinth()                                                           # Var == Class Labyrinth
         lab.lab_display(self.window)                                                # Affichage du labyrinth
-        Mac = Character("Mac", lab.structure, character_position("D"))               # Place Character
-        guardian = Guardian("Guardian", lab.structure, character_position("A"))    # Place Guardian
+        Mac = Character("Mac", lab.structure, lab.character_position("D"))      #Place MacGyver
+        Guardian = Character("Guardian", lab.structure, lab.character_position("A"))    # Place Guardian
         needle = Item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
         alcohol = Item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
         toilet_tube = Item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
@@ -94,6 +97,7 @@ class GameLoops: # Définition de la classe de jeu principal
         while self.game_loop:                        # Tant que la condition de la boucle de jeu est "vraie"
             #pygame.mixer.unpause()                                                # Son en pause avant appel
             # Réglage sonore (lecture en boucle avec fin en fondu)
+            self.sound_game.set_volume(.07)
             self.sound_game.play(loops=1, maxtime=0, fade_ms=50)
 
             # Blocage du taux de rafraichissement pour éviter surload Processeur
@@ -124,6 +128,7 @@ class GameLoops: # Définition de la classe de jeu principal
                 if len(Mac.back_pack) == 3: # Test de la récupération des 4 Items
                     win = True # Victoire est "vraie" si les Items sont collectés
                     self.sound_win.play() # Jouer le son de victoire
+                    self.sound_win.set_volume(.09)
                     while win: # Dans le cas de victoire                            
                         self.window.blit(win_img, (0, 0)) # Collage de l'image de victoire
                         self.window.blit(backpack_win, (0, 600))
@@ -132,13 +137,14 @@ class GameLoops: # Définition de la classe de jeu principal
                             if event.type == QUIT:
                                 win = False
                             elif event.type == KEYDOWN:
-                                # N'importe quelle touche incluant la touche "logique" d'échappement
-                                if event.key == K_ESCAPE or event.type != K_ESCAPE:
+                                # Echap por quitter
+                                if event.key == K_ESCAPE:
                                     win = False
                 elif len(Mac.back_pack) != 3: # Dans le cas où les Items ne sont pas tous récupérés
                     self.sound.stop() # Arrêt de la musique
                     loose = True # Activation scénario défaite
                     self.sound_loose.play() # Jouer le son de la défaite ( Sorti de la boucle)
+                    self.sound_loose.set_volume(.09)
                     while loose: # Si défaite...
                         self.window.blit(loose_img, (0, 0)) # Collage de l'image de défaite
                         self.window.blit(backpack_loose, (0, 600))
@@ -148,7 +154,7 @@ class GameLoops: # Définition de la classe de jeu principal
                                 loose = False
                                 play = 0
                             elif event.type == KEYDOWN or event.type == KEYUP:
-                                # N'importe quelle touche incluant la touche "logique" d'échappement
+                                # Echap pour quitter
                                 if event.key == K_ESCAPE:
                                     loose = False
 
@@ -158,4 +164,5 @@ class GameLoops: # Définition de la classe de jeu principal
             self.window.blit(Mac.picture, (Mac.x, Mac.y)) # Collage du personnage dans le labyrinth
             Mac.catch_item(self.window) # Appel de la définition de récupération d'objet
             lab.structure[Mac.case_y][Mac.case_x] = "M" # Association du personnage à "M" (Lecture de la Map)
+            lab.structure[Guardian.case_y][Guardian.case_x] = "G" # Association du personnage à "G" (Lecture de la Map)
             pygame.display.flip() # Rafraichissement de la fenêtre
