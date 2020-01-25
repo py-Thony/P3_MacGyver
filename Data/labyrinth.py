@@ -29,18 +29,6 @@ class Labyrinth:
             self.structure = [[letter for letter in line if letter != "\n"] for line in labyrinth]
 
 
-    def place_object_in_maze(self):
-        """
-        Find a random free position to place the items in the maze
-        """
-        random_line = randint(0, len(self.structure) -1)
-        random_tile = randint(0, len(self.structure[random_line]) -1)
-        place_object_in_maze = self.structure[random_line][random_tile]
-        while place_object_in_maze != " ":
-            random_tile = randint(0, len(self.structure[random_line]) -1)
-            place_object_in_maze = self.structure[random_line][random_tile]
-        return random_line, random_tile
-
     def character_position(self, chara_letter):
         """
         Find the Departure tile to place Macgyver and Finish tile to place Guardian
@@ -61,7 +49,16 @@ class Labyrinth:
         self.case_y = position[0]
         self.case_x = position[1]
         self.structure[self.case_y][self.case_x] = name[0]
-        
+
+    def place_item(self):
+        random_line = randint(0, len(self.structure) -1)
+        random_tile = randint(0, len(self.structure[random_line]) -1)
+        place_object_in_maze = self.structure[random_line][random_tile]
+        while place_object_in_maze != " ":
+            random_tile = randint(0, len(self.structure[random_line]) -1)
+            place_object_in_maze = self.structure[random_line][random_tile]
+        return random_line, random_tile
+
     def lab_display(self, window):
         """
         This method loads the images from "constants" and place them on structure
