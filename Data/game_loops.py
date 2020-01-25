@@ -27,12 +27,7 @@ class GameLoops: # Définition de la classe de jeu principal
         pygame.display.set_icon(icon)                                      # Affichage de l'icône
         pygame.display.set_caption(Data.constants.Title)       # Affichage du titre de la fenêtre
         pygame.key.set_repeat(400, 30)
-        self.sound = pygame.mixer.Sound("sound/Mac.wav")                      # Musique d'accueil
-        # Réglage du volume à la baisse (Musique d'origine trop forte)
-        self.sound.set_volume(.1)
-        self.sound_game = pygame.mixer.Sound("sound/game.wav")            # Musique du labyrinthe
-        self.sound_loose = pygame.mixer.Sound("sound/loose.wav")              # Musique Game Over
-        self.sound_win = pygame.mixer.Sound("sound/win.wav")                   # Musique victoire
+    
         self.game_loop = True                  # Affectation de valeur "vraie" à la boucle de jeu
         self.home_loop = True            # Affectation de valeur "vraie" à la boucle de l'accueil
 
@@ -46,13 +41,15 @@ class GameLoops: # Définition de la classe de jeu principal
 
         # self.home_loop = True                                     # Boucle de l'accueil sur "vrai"
         self.game_loop = False       # Boucle de jeu sur "Faux" (sera vrai quand Home sera "faux")
-        
+        # Réglage du volume à la baisse (Musique d'origine trop forte)
+        pygame.mixer.music.set_volume(.1)
+        self.sound = pygame.mixer.music.load("sound/Mac.wav")                      # Musique d'accueil
+        pygame.mixer.music.set_volume(.5)
+        self.sound = pygame.mixer.music.play() 
         while self.home_loop:                                         # Tant que home_loop == True
             
             self.window.blit(HOME_PIC, (0, 0))                        # Collage de l'image de fond
             self.window.blit(backpack_start, (0, 600))
-            self.sound.set_volume(.05)
-            self.sound.play()                            # Activation de la musique de fond
 
             for event in pygame.event.get():             # Pour tout évennement détecté par Pygame
                 
@@ -69,7 +66,7 @@ class GameLoops: # Définition de la classe de jeu principal
                     elif event.key == K_RETURN:                           # Si la touche est ENTREE
                         self.game_loop = True                            # Boucle de jeu sur "Vrai"
                         self.home_loop = False                      # Fin de la boucle de l'accueil
-                        pygame.mixer.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
+                        pygame.mixer.music.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
 
             pygame.display.flip() # Rafraichissement de la fenêtre pour afficher les collages à jour
 
@@ -87,18 +84,20 @@ class GameLoops: # Définition de la classe de jeu principal
         lab.lab_display(self.window)                                                # Affichage du labyrinth
         Mac = Character("Mac", lab.structure, lab.character_position("D"))      #Place MacGyver
         Guardian = Character("Guardian", lab.structure, lab.character_position("A"))    # Place Guardian
-        needle = lab.item("Needle", lab.structure, lab.place_object_in_maze())            # Item #1 position aléatoire
-        alcohol = lab.item("Alcohol", lab.structure, lab.place_object_in_maze())          # Item #2 position aléatoire
-        toilet_tube = lab.item("Toilet_tube", lab.structure, lab.place_object_in_maze())  # Item #3 position aléatoire
+        needle = lab.item("Needle", lab.structure, lab.place_objects_in_maze())            # Item #1 position aléatoire
+        alcohol = lab.item("Alcohol", lab.structure, lab.place_objects_in_maze())          # Item #2 position aléatoire
+        toilet_tube = lab.item("Toilet_tube", lab.structure, lab.place_objects_in_maze())  # Item #3 position aléatoire
 
-        
+        # Réglage du volume à la baisse (Musique d'origine trop forte)
+        pygame.mixer.music.set_volume(.1)
+        self.sound_game = pygame.mixer.music.load("sound/game.wav")            # Musique du labyrinthe
+        pygame.mixer.music.set_volume(.7)
+        self.sound_game = pygame.mixer.music.play()        
         # La valeur de self.home.loop == False est connue grâce à home_loops()
         #La valeur de self.game_loop = True est connue grâce à home_loops()      
         while self.game_loop:                        # Tant que la condition de la boucle de jeu est "vraie"
             #pygame.mixer.unpause()                                                # Son en pause avant appel
-            # Réglage sonore (lecture en boucle avec fin en fondu)
-            self.sound_game.set_volume(.07)
-            self.sound_game.play(loops=1, maxtime=0, fade_ms=50)
+
 
             # Blocage du taux de rafraichissement pour éviter surload Processeur
             pygame.time.Clock().tick(60) 
@@ -107,11 +106,11 @@ class GameLoops: # Définition de la classe de jeu principal
             for event in pygame.event.get(): # Possibilité de quitter....
                 if event.type == QUIT:
                     self.game_loop = False
-                    self.home_loop = True
+                    self.home_loop = False
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         self.game_loop = False
-                        self.home_loop = True
+                        self.home_loop = False
                     # mouvements avec les flèches clavier
                     elif event.key == K_DOWN:
                         Mac.move('right')
@@ -124,12 +123,15 @@ class GameLoops: # Définition de la classe de jeu principal
             pygame.display.flip() # Rafraichissement de la fenêtre
 
             if lab.structure[Mac.case_y][Mac.case_x] == "G": # Quand Mac rencontre le gardien
+                # Réglage du volume à la baisse (Musique d'origine trop forte)
+                pygame.mixer.music.set_volume(.1)
                 self.game_loop = False # Fin de la boucle de jeu
                 pygame.mixer.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
-                if len(Mac.back_pack) == 3: # Test de la récupération des 4 Items
+                if len(Mac.backpack) == 3: # Test de la récupération des 3 Items
                     win = True # Victoire est "vraie" si les Items sont collectés
-                    self.sound_win.play() # Jouer le son de victoire
-                    self.sound_win.set_volume(.09) # Réglage du volume sur "audible mais pas trop"
+                    self.sound_win = pygame.mixer.music.load("sound/win.wav")              # Musique Game Over
+                    pygame.mixer.music.set_volume(.7)
+                    self.sound_game = pygame.mixer.music.play()  
                     while win: # Dans le cas de victoire                            
                         self.window.blit(win_img, (0, 0)) # Collage de l'image de victoire
                         self.window.blit(backpack_win, (0, 600))
@@ -141,11 +143,14 @@ class GameLoops: # Définition de la classe de jeu principal
                                 # Echap por quitter
                                 if event.key == K_ESCAPE:
                                     win = False
-                elif len(Mac.back_pack) != 3: # Dans le cas où les Items ne sont pas tous récupérés
+                elif len(Mac.backpack) != 3: # Dans le cas où les Items ne sont pas tous récupérés
+                    # Réglage du volume à la baisse (Musique d'origine trop forte)
+                    pygame.mixer.music.set_volume(.1)
                     self.sound.stop() # Arrêt de la musique
                     loose = True # Activation scénario défaite
-                    self.sound_loose.play() # Jouer le son de la défaite ( Sorti de la boucle)
-                    self.sound_loose.set_volume(.09) # Réglage du volume sur "audible mais pas trop"
+                    self.sound_loose = pygame.mixer.music.load("sound/loose.wav")              # Musique Game Over
+                    pygame.mixer.music.set_volume(.7)
+                    self.sound_game = pygame.mixer.music.play()
                     while loose: # Si défaite...
                         self.window.blit(loose_img, (0, 0)) # Collage de l'image de défaite
                         self.window.blit(backpack_loose, (0, 600))

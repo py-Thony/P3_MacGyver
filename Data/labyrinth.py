@@ -50,7 +50,7 @@ class Labyrinth:
         self.case_x = position[1]
         self.structure[self.case_y][self.case_x] = name[0]
 
-    def place_item(self):
+    def place_objects_in_maze(self):
         random_line = randint(0, len(self.structure) -1)
         random_tile = randint(0, len(self.structure[random_line]) -1)
         place_object_in_maze = self.structure[random_line][random_tile]
