@@ -1,18 +1,22 @@
 #!/usr/bin/python3
-# -*- coding: Utf-8 -*
+# -*- coding: Utf-8 -*-
 
 """
 MAIN GAME PAGE
 Script Python
 """
 
-from Data.game_loops import GameLoops # Importation de la classe GameLoops depuis game_loops dans Data
+# Import of the GameLoops class from game_loops into Data
+from Data.game_loops import GameLoops
 
-LOOP = GameLoops() # Simplification du nom de la classe pour l'appel ultérieur de la méthode home_loops
+# Simplification of the class name 
+# for the subsequent call to the home_loops method
+LOOP = GameLoops()
 
 """
-    Démarrage du programme minimisé au simple lancement de la boucle de jeu
+    Starting the program minimized by simply launching the game loop
 """
 
-LOOP.home_loops() # Appel simplifié ( Méthode home_loops() de la classe GameLoops() )
+# Simplified call (home_loops () method of the GameLoops () class)
+LOOP.home_loops()
 LOOP.game_loops()

@@ -1,109 +1,255 @@
-import os
-import pygame
-from pygame.locals import *
-import Data.constants
+#!/usr/bin/python3
+# -*- coding: Utf-8 -*-
+
+"""
+The PEP8 convention: 
+The standard Python library is conservative and requires limiting lines 
+to 79 characters (and docstrings or comments to 72).
+I therefore put the line using ' \ ' to respect this convention.
+|-------------------------Max width of comments------------------------|
+|-------------------------Max width of the code-------------------------------|
+
+Limiting the required editor window width allows you to open multiple 
+files side-by-side and works well when you use code review tools that 
+present both versions in adjacent columns.
+
+
+The use of docstrings can be described as abusive, but I remind you 
+that this is to demonstrate a complete understanding of the code .
+The choice of docstring instead of multi-line comments is only a 
+question of readability of the code overloaded with annotations.
+"""
+
+import os                                 # For interaction with system
+                                      # For SDL gestion (video centerd)
+
+import pygame                                 # For gestion of graphics
+
+from pygame.locals import *                      # Submodules of pygame
+
+"""
+Importing only what is necessary reduces the loading in memory.
+The second advantage resides in the fact of knowing the state of each 
+variable (via pylint in VScode) when the code is updated.
+
+And obliging to an additional rigor concerning the control of code.
+"""
+
+# IMport the necessary variables (uppercases for variables)
+from Data.constants import ICON_IMG, TITLE, Y_SIZE_WINDOW, X_SIZE_WINDOW, \
+                           DELAY, INTERVAL, HOME_IMG, BACK_IMG, LOOSE_IMG, \
+                           BACKPACK_HOME_IMG, BACKPACK_WIN_IMG, WIN_IMG, \
+                           BACKPACK_LOOSE_IMG, WAV_LOOSE, FPS
+
+# Import the structure and settings of the labyrinth
 from Data.labyrinth import Labyrinth
+
+# Import the caracterics of positions and moves of characters
 from Data.character import Character
-#from Data.guardian import Guardian
-#from Data.item import Item
+# Initialization of Pygame's modules
+pygame.init()
 
-pygame.init() # Initialisation du module Pygame
+"""
+To comply with the naming PEP8 convention:
+            
+            - variable == VARIABLE
+              (all in capital letters)
+            
+            - method, function == method, function
+              (all lowercase)
+            
+            - class, classclass == Class, ClassClass
+              (first letter of words in uppercase)
+            
+            - 1var is forbidden, var1 allowed
+              (a name must start with a letter)
+            
+            - myVarOne accepted but my_var_one recommannded  
+              (the naming can be adapted but must remain consistent)
+            
+            - all characters except '_' are prohibited
+              (@, !, #, ... prohibited)
+            
+            - acronym in CapWord allways in uppercase
+              (HTTPServerError: yes, HttpServerError: no!)
+"""
 
-class GameLoops: # Définition de la classe de jeu principal
+class GameLoops:                         # Definition of principal loop
     """
     Creation of all loops game
-    Les commentaires sont pour la plupart évidents, ils ne sont justifiés que pour la démonstration
-    d'une parfaite compréhension du code étant donné qu'il s'agit d'un TP.
+    The comments are often obvious, they are only justified to 
+    demonstrate a perfect understanding of the code because it's a T.P.
     """
 
     def __init__(self):
 
         """
-        Creation of the main window and game sounds.
+        Creation and settings of the main window and key.events.
         """
-        os.environ['SDL_VIDEO_CENTERED'] = '1' # Centrage de la fenêtre ( Doit être appelé avant)
-        self.window = pygame.display.set_mode((600, 640))                  # Format de la fenêtre
-        icon = pygame.image.load(Data.constants.ICON_IMG)                   # Icône de la fenêtre
-        pygame.display.set_icon(icon)                                      # Affichage de l'icône
-        pygame.display.set_caption(Data.constants.Title)       # Affichage du titre de la fenêtre
-        pygame.key.set_repeat(400, 30)
-    
-        self.game_loop = True                  # Affectation de valeur "vraie" à la boucle de jeu
-        self.home_loop = True            # Affectation de valeur "vraie" à la boucle de l'accueil
+        
+        # Window centering (Must be called before)
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
 
-    def home_loops(self):                                  # Définition de la boucle de l'accueil
+        # Window format
+        self.window = pygame.display.set_mode((Y_SIZE_WINDOW, X_SIZE_WINDOW))
+        ICON = pygame.image.load(ICON_IMG)                # Window icon
+        pygame.display.set_icon(ICON)                    # Icon display
+        pygame.display.set_caption(TITLE)        # Window title display
+        
+        # Keys that are held down 
+        # will generate multiple pygame.KEYDOWN events
+        pygame.key.set_repeat(DELAY, INTERVAL) 
+    
+        self.game_loop = True            # define var before assignment
+        self.home_loop = True            # define var before assignment
+
+    def home_loops(self):                 # Definition of the home loop
+        
         """
         Home loop for the welcome window with sound.
         """
-        # Chargement et conversion du fond d'écran (Accueil et Sac à dos)
-        HOME_PIC = pygame.image.load(Data.constants.HOME_PIC).convert() 
-        backpack_start = pygame.image.load(Data.constants.backpack_start).convert_alpha()
+        
+        # Loading and converting the wallpaper (Home and Backpack)
+        HOME_BACKGROUNG = pygame.image.load(HOME_IMG).convert() 
+        HOME_BACKPACK = pygame.image.load(BACKPACK_HOME_IMG).convert_alpha()
 
-        # self.home_loop = True                                     # Boucle de l'accueil sur "vrai"
-        self.game_loop = False       # Boucle de jeu sur "Faux" (sera vrai quand Home sera "faux")
-        # Réglage du volume à la baisse (Musique d'origine trop forte)
-        pygame.mixer.music.set_volume(.1)
-        self.sound = pygame.mixer.music.load("sound/Mac.wav")                      # Musique d'accueil
-        pygame.mixer.music.set_volume(.3)
-        self.sound = pygame.mixer.music.play() 
-        while self.home_loop:                                         # Tant que home_loop == True
-            
-            self.window.blit(HOME_PIC, (0, 0))                        # Collage de l'image de fond
-            self.window.blit(backpack_start, (0, 600))
+        # self.home_loop = True 
+        # (The value is returned from the constructor of Class)
 
-            for event in pygame.event.get():             # Pour tout évennement détecté par Pygame
+        # Game loop on 'False' (will be true when Home is 'false')
+        self.game_loop = False
+
+        # Loading of the music before use
+        self.sound = pygame.mixer.music.load("sound/Mac.wav")
+        # Volume control down (Original music too loud)
+        pygame.mixer.music.set_volume(.2)
+        # Playing music
+        self.sound = pygame.mixer.music.play()
+
+        # Instructions to follow as long as the loop is true
+        while self.home_loop:
+
+            # Collage of the images
+            # (game zone)            
+            self.window.blit(HOME_BACKGROUNG, (0, 0))
+            # (bottom zone)
+            self.window.blit(HOME_BACKPACK, (0, 600))
+
+            # For any event detected by Pygame
+            for event in pygame.event.get():
                 
-                if event.type == QUIT:       # Si l'évennement est un clic sur la croix de fenêtre
-                    self.home_loop = False                         # Fin de la boucle de l'accueil
-                    self.game_loop = False                             # Arrêt de la boucle de jeu
+                # In the case of a click on the window cross
+                if event.type == QUIT:
+                    self.home_loop = False             # Stop home loop
+                    self.game_loop = False             # Stop game loop
                 
-                elif event.type == KEYDOWN:                 # Dans le cas d'une pression de touche
+                # In the case of a key press
+                elif event.type == KEYDOWN:
                     
-                    if event.key == K_ESCAPE:                           # Si la touche est "Echap"
-                        self.game_loop = False                         # Arrêt de la boucle de jeu
-                        self.home_loop = False                   # Arrêt de la boucle de l'accueil 
+                    # If key press == escape
+                    if event.key == K_ESCAPE:
+                        self.game_loop = False         # Stop game loop
+                        self.home_loop = False         # Stop home loop
                     
-                    elif event.key == K_RETURN:                           # Si la touche est ENTREE
-                        self.game_loop = True                            # Boucle de jeu sur "Vrai"
-                        self.home_loop = False                      # Fin de la boucle de l'accueil
-                        pygame.mixer.music.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
+                    # If key press == return
+                    elif event.key == K_RETURN:
+                        self.game_loop = True           # RUN game loop
+                        self.home_loop = False         # Stop home loop
+                        
+                        """
+                        Only one music can be played at a time, 
+                        otherwise you have to use the queue.
 
-            pygame.display.flip() # Rafraichissement de la fenêtre pour afficher les collages à jour
+                        So it's easier to just stop the music playing 
+                        before loading the news.
+                        """
+                        pygame.mixer.music.stop()
 
-    def game_loops(self):                                           # Définition de la boucle de jeu
+            # Refresh the window to display the updated collages
+            pygame.display.flip()
+
+    def game_loops(self):                 # Definition of the game loop
+        
         """
         Main game loop
         Creation of game structure, characters and items.
         """
-        BACK_GROUND = pygame.image.load(Data.constants.BACK_IMG).convert_alpha()       # Background of Laby.
-        backpack_win = pygame.image.load(Data.constants.backpack_win).convert_alpha()   # Backpack (Victory)
-        backpack_loose = pygame.image.load(Data.constants.backpack_loose).convert_alpha() # Backpack (loose)
-        win_img = pygame.image.load(Data.constants.win_img).convert_alpha()           # Background (Victory)
-        loose_img = pygame.image.load(Data.constants.youloose_img).convert_alpha()  # Background (game over)
-        lab = Labyrinth()                                                           # Var == Class Labyrinth
-        lab.lab_display(self.window)                                                # Affichage du labyrinth
-        Mac = Character("Mac", lab.structure, lab.character_position("D"))      #Place MacGyver
-        Guardian = Character("Guardian", lab.structure, lab.character_position("A"))    # Place Guardian
-        needle = lab.item("Needle", lab.structure, lab.place_objects_in_maze())            # Item #1 position aléatoire
-        alcohol = lab.item("Alcohol", lab.structure, lab.place_objects_in_maze())          # Item #2 position aléatoire
-        toilet_tube = lab.item("Toilet_tube", lab.structure, lab.place_objects_in_maze())  # Item #3 position aléatoire
+        
+        # Background of Laby.
+        BACKGROUND = pygame.image.load(BACK_IMG).convert_alpha()
+        # Backpack (Victory)
+        backpack_win = pygame.image.load(BACKPACK_WIN_IMG).convert_alpha()
+        # Backpack (loose)
+        backpack_loose = pygame.image.load(BACKPACK_LOOSE_IMG).convert_alpha()
+        # Background (Victory)
+        win_img = pygame.image.load(WIN_IMG).convert_alpha()
+        # Background (game over)
+        loose_img = pygame.image.load(LOOSE_IMG).convert_alpha()
+        
+        # Simplifies entering the class name
+        lab = Labyrinth()
+        # Labyrinth display
+        lab.lab_display(self.window)
 
-        # Réglage du volume à la baisse (Musique d'origine trop forte)
-        pygame.mixer.music.set_volume(.1)
-        self.sound_game = pygame.mixer.music.load("sound/game.wav")            # Musique du labyrinthe
-        pygame.mixer.music.set_volume(.7)
-        self.sound_game = pygame.mixer.music.play()        
-        # La valeur de self.home.loop == False est connue grâce à home_loops()
-        #La valeur de self.game_loop = True est connue grâce à home_loops()      
-        while self.game_loop:                        # Tant que la condition de la boucle de jeu est "vraie"
-            #pygame.mixer.unpause()                                                # Son en pause avant appel
+        # Assignment of the characteristics inherited from the 
+        # character&Labyrinth classes to the different variables.
+        #
+        # Demonstration of understanding the cutting of code line too long
+        MAC = Character(
+            "Mac", 
+            lab.structure, 
+            lab.character_position("D")
+        )
+
+        GUARDIAN = Character(
+            "Guardian", 
+            lab.structure, 
+            lab.character_position("A")
+        )
+
+        NEEDLE = lab.item(
+            "Needle", 
+            lab.structure, 
+            lab.place_objects_in_maze()
+        )
+
+        ALCOHOL = lab.item(
+            "Alcohol", 
+            lab.structure, 
+            lab.place_objects_in_maze()
+        )
+
+        TOILET_TUBE = lab.item(
+            "Toilet_tube", 
+            lab.structure, 
+            lab.place_objects_in_maze()
+        )
+
+        # Volume control down (Original music too loud)
+        pygame.mixer.music.set_volume(.3)
+        # Loading music
+        self.sound_game = pygame.mixer.music.load("sound/game.wav")
+        # Playing music
+        self.sound_game = pygame.mixer.music.play() 
 
 
-            # Blocage du taux de rafraichissement pour éviter surload Processeur
-            pygame.time.Clock().tick(60) 
-            lab.lab_display(self.window) # Affichage du labyrinth dans la fenêtre
-            lab.structure[Mac.case_y][Mac.case_x] = " " # 'Case vide' pour autoriser déplacement personnage
-            for event in pygame.event.get(): # Possibilité de quitter....
+        # self.home.loop == False is known thanks to home_loops ()
+        # self.game_loop = True is known thanks to home_loops()      
+        
+        # Instructions to follow as long as the loop is true
+        while self.game_loop:
+
+            # Blocking the refresh rate to avoid processor overload
+            # 30 FPS is sufficient for refreshment
+            pygame.time.Clock().tick(FPS)
+
+            # Labyrinth display
+            lab.lab_display(self.window)
+            # 'Empty box' to allow character movement
+            lab.structure[MAC.case_y][MAC.case_x] = " "
+
+            # Already explained in home_loops()
+            for event in pygame.event.get():
                 if event.type == QUIT:
                     self.game_loop = False
                     self.home_loop = False
@@ -111,58 +257,112 @@ class GameLoops: # Définition de la classe de jeu principal
                     if event.key == K_ESCAPE:
                         self.game_loop = False
                         self.home_loop = False
-                    # mouvements avec les flèches clavier
+                    
+                    # If a keyboard arrow is pressed,
+                    # call of the move function 
+                    # corresponding to the corresponding arrow
                     elif event.key == K_DOWN:
-                        Mac.move('right')
+                        MAC.move('right')
                     elif event.key == K_UP:
-                        Mac.move('left')
+                        MAC.move('left')
                     elif event.key == K_LEFT:
-                        Mac.move('up')
+                        MAC.move('up')
                     elif event.key == K_RIGHT:
-                        Mac.move('down')
-            pygame.display.flip() # Rafraichissement de la fenêtre
+                        MAC.move('down')
+            
+            # Refresh the window to update the collages
+            pygame.display.flip()
 
-            if lab.structure[Mac.case_y][Mac.case_x] == "G": # Quand Mac rencontre le gardien
-                self.game_loop = False # Fin de la boucle de jeu
-                pygame.mixer.stop() # Arrêt de la musique pour pouvoir démarrer la suivante
-                if len(Mac.backpack) == 3: # Test de la récupération des 3 Items
-                    win = True # Victoire est "vraie" si les Items sont collectés
-                    self.sound_win = pygame.mixer.music.load("sound/win.wav")              # Musique Game Over
-                    pygame.mixer.music.set_volume(.2)
+            # When MacGyver meets the Guardian
+            if lab.structure[MAC.case_y][MAC.case_x] == "G":
+
+                # The game is over, end of the game loop
+                self.game_loop = False 
+
+                # Stop Game music
+                pygame.mixer.stop()
+
+                # Test of the recovery of the 3 Items
+                # victory is 'true' if Items are all collected
+                if len(MAC.backpack) == 3:
+                    win = True
+
+                    # Loading music of victory
+                    self.sound_win = pygame.mixer.music.load("sound/win.wav")
+                    # Volume control 
+                    pygame.mixer.music.set_volume(.1)
+                    # Playing music
                     pygame.mixer.music.play()  
-                    while win: # Dans le cas de victoire                            
-                        self.window.blit(win_img, (0, 0)) # Collage de l'image de victoire
+
+                    # As long as the condition is fulfilled
+                    while win:
+
+                        # Collage of the game zone
+                        self.window.blit(win_img, (0, 0))
+                        # Collage of the bottom zone
                         self.window.blit(backpack_win, (0, 600))
-                        pygame.display.flip() # Rafraichissement de l'image
-                        for event in pygame.event.get(): # Possibilité de quitter....
+
+                        # Display refresh
+                        pygame.display.flip()
+
+
+                        # Home and game loops are already stopped, 
+                        # so just stop the current loop (win loop)
+                        for event in pygame.event.get():
                             if event.type == QUIT:
                                 win = False
                             elif event.type == KEYDOWN:
-                                # Echap por quitter
                                 if event.key == K_ESCAPE:
                                     win = False
-                elif len(Mac.backpack) != 3: # Dans le cas où les Items ne sont pas tous récupérés
-                    loose = True # Activation scénario défaite
-                    self.sound_loose = pygame.mixer.music.load("sound/loose.wav")              # Musique Game Over
-                    pygame.mixer.music.set_volume(.2)
+
+                # Test of the recovery of the 3 Items
+                # loose is 'true' if Items are not all collected                                    
+                elif len(MAC.backpack) != 3:
+                    loose = True
+
+                    # Loading loose music
+                    self.sound_loose = pygame.mixer.music.load(WAV_LOOSE)
+                    # Control volume
+                    pygame.mixer.music.set_volume(.1)
+                    # Playing music
                     pygame.mixer.music.play()
-                    while loose: # Si défaite...
-                        self.window.blit(loose_img, (0, 0)) # Collage de l'image de défaite
+
+
+                    # As long as the condition is fulfilled
+                    while loose:
+                        # Collage of the game zone
+                        self.window.blit(loose_img, (0, 0))
+                        # Collage of the bottom zone
                         self.window.blit(backpack_loose, (0, 600))
-                        pygame.display.flip() # Rafraichissement de la fenêtre
-                        for event in pygame.event.get(): # Possibilité de quitter....
+                        
+                        # Display refresh
+                        pygame.display.flip()
+                        
+                        # Home and game loops are already stopped, 
+                        # so just stop the current loop (win loop)
+                        for event in pygame.event.get():
                             if event.type == QUIT:
                                 loose = False
-                            elif event.type == KEYDOWN or event.type == KEYUP:
-                                # Echap pour quitter
+                            elif event.type == KEYDOWN:
                                 if event.key == K_ESCAPE:
                                     loose = False
 
 
-            self.window.blit(BACK_GROUND, (0, 0)) # Collage du fond du labyrinth
-            lab.lab_display(self.window) # Affichage du labyrinth dans la fenêtre
-            self.window.blit(Mac.picture, (Mac.x, Mac.y)) # Collage du personnage dans le labyrinth
-            Mac.catch_item(self.window) # Appel de la définition de récupération d'objet
-            lab.structure[Mac.case_y][Mac.case_x] = "M" # Association du personnage à "M" (Lecture de la Map)
-            lab.structure[Guardian.case_y][Guardian.case_x] = "G" # Association du personnage à "G" (Lecture de la Map)
-            pygame.display.flip() # Rafraichissement de la fenêtre
+            # End of block (When MacGyver meets the Guardian)
+            # For win or loose scenary
+
+            # Collage of background
+            self.window.blit(BACKGROUND, (0, 0))
+            # Labyrinth display
+            lab.lab_display(self.window)
+            # Collage of character
+            self.window.blit(MAC.picture, (MAC.x, MAC.y))
+            # Call method for catch items
+            MAC.catch_item(self.window)
+            # Associate the character with his letter
+            lab.structure[MAC.case_y][MAC.case_x] = "M"
+            # Associate the guardian with his letter
+            lab.structure[GUARDIAN.case_y][GUARDIAN.case_x] = "G"
+            
+            # Display refresh
+            pygame.display.flip()
