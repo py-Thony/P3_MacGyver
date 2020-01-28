@@ -135,6 +135,7 @@ class Labyrinth:
         self.case_x = position[1]
         # According first letter of item with position of structure
         self.structure[self.case_y][self.case_x] = name[0]
+        return position
 
     def place_objects_in_maze(self):
 

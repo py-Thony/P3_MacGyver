@@ -59,7 +59,7 @@ FPS = 30
 ####################
 
 # pygame.key.set_repeat(delay, interval)
-DELAY = 200
+DELAY = 100
 INTERVAL = 20
 
 
@@ -119,6 +119,8 @@ ALL_ITEMS_IMG = "pics/four_items.png"
 
 # Music
 WAV_LOOSE = "sound/loose.wav"
+GAME_WAV = "sound/game.wav"
+MAC_WAV = "sound/Mac.wav"
 
 # Sound
 WAV_ALL_ITEMS = "sound/ALL_ITEMS.wav"

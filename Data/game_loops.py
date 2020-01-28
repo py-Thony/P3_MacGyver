@@ -39,7 +39,8 @@ And obliging to an additional rigor concerning the control of code.
 from Data.constants import ICON_IMG, TITLE, Y_SIZE_WINDOW, X_SIZE_WINDOW, \
                            DELAY, INTERVAL, HOME_IMG, BACK_IMG, LOOSE_IMG, \
                            BACKPACK_HOME_IMG, BACKPACK_WIN_IMG, WIN_IMG, \
-                           BACKPACK_LOOSE_IMG, WAV_LOOSE, FPS
+                           BACKPACK_LOOSE_IMG, WAV_LOOSE, FPS, GAME_WAV, \
+                           MAC_WAV
 
 # Import the structure and settings of the labyrinth
 from Data.labyrinth import Labyrinth
@@ -120,7 +121,7 @@ class GameLoops:                         # Definition of principal loop
         self.game_loop = False
 
         # Loading of the music before use
-        self.sound = pygame.mixer.music.load("sound/Mac.wav")
+        self.sound = pygame.mixer.music.load(MAC_WAV)
         # Volume control down (Original music too loud)
         pygame.mixer.music.set_volume(.2)
         # Playing music
@@ -178,13 +179,13 @@ class GameLoops:                         # Definition of principal loop
         # Background of Laby.
         BACKGROUND = pygame.image.load(BACK_IMG).convert_alpha()
         # Backpack (Victory)
-        backpack_win = pygame.image.load(BACKPACK_WIN_IMG).convert_alpha()
+        BACKPACK_WIN = pygame.image.load(BACKPACK_WIN_IMG).convert_alpha()
         # Backpack (loose)
-        backpack_loose = pygame.image.load(BACKPACK_LOOSE_IMG).convert_alpha()
+        BACKPACK_LOOSE = pygame.image.load(BACKPACK_LOOSE_IMG).convert_alpha()
         # Background (Victory)
-        win_img = pygame.image.load(WIN_IMG).convert_alpha()
+        WIN = pygame.image.load(WIN_IMG).convert_alpha()
         # Background (game over)
-        loose_img = pygame.image.load(LOOSE_IMG).convert_alpha()
+        LOOSE = pygame.image.load(LOOSE_IMG).convert_alpha()
         
         # Simplifies entering the class name
         lab = Labyrinth()
@@ -224,11 +225,11 @@ class GameLoops:                         # Definition of principal loop
             lab.structure, 
             lab.place_objects_in_maze()
         )
-
+        
         # Volume control down (Original music too loud)
         pygame.mixer.music.set_volume(.3)
         # Loading music
-        self.sound_game = pygame.mixer.music.load("sound/game.wav")
+        self.sound_game = pygame.mixer.music.load(GAME_WAV)
         # Playing music
         self.sound_game = pygame.mixer.music.play() 
 
@@ -298,9 +299,9 @@ class GameLoops:                         # Definition of principal loop
                     while win:
 
                         # Collage of the game zone
-                        self.window.blit(win_img, (0, 0))
+                        self.window.blit(WIN, (0, 0))
                         # Collage of the bottom zone
-                        self.window.blit(backpack_win, (0, 600))
+                        self.window.blit(BACKPACK_WIN, (0, 600))
 
                         # Display refresh
                         pygame.display.flip()
@@ -331,9 +332,9 @@ class GameLoops:                         # Definition of principal loop
                     # As long as the condition is fulfilled
                     while loose:
                         # Collage of the game zone
-                        self.window.blit(loose_img, (0, 0))
+                        self.window.blit(LOOSE, (0, 0))
                         # Collage of the bottom zone
-                        self.window.blit(backpack_loose, (0, 600))
+                        self.window.blit(BACKPACK_LOOSE, (0, 600))
                         
                         # Display refresh
                         pygame.display.flip()
