@@ -13,9 +13,7 @@ if sys.platform == "win32":
 
 
 
-executables = [
-    Executable('Macgyver.py', base=base)
-]
+executables = [Executable('Macgyver.py', base=base)]
 
 setup(name='LabMac',
       version = '2.0',
