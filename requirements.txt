@@ -7,7 +7,7 @@ Here all used in this program
 
 python==3.8
 
-pip 19.2.3
+pip==19.2.3
 pygame==1.9.6
 
 # Editor: Visual Studio Code 2019
