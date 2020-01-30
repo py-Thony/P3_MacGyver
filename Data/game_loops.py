@@ -9,15 +9,6 @@ I therefore put the line using ' \ ' to respect this convention.
 |-------------------------Max width of comments------------------------|
 |-------------------------Max width of the code-------------------------------|
 
-Limiting the required editor window width allows you to open multiple 
-files side-by-side and works well when you use code review tools that 
-present both versions in adjacent columns.
-
-
-The use of docstrings can be described as abusive, but I remind you 
-that this is to demonstrate a complete understanding of the code .
-The choice of docstring instead of multi-line comments is only a 
-question of readability of the code overloaded with annotations.
 """
 
 import os                                 # For interaction with system
@@ -27,15 +18,6 @@ import pygame                                 # For gestion of graphics
 
 from pygame.locals import *                      # Submodules of pygame
 
-"""
-Importing only what is necessary reduces the loading in memory.
-The second advantage resides in the fact of knowing the state of each 
-variable (via pylint in VScode) when the code is updated.
-
-And obliging to an additional rigor concerning the control of code.
-"""
-
-# IMport the necessary variables (uppercases for variables)
 from Data.constants import ICON_IMG, TITLE, Y_SIZE_WINDOW, X_SIZE_WINDOW, \
                            DELAY, INTERVAL, HOME_IMG, BACK_IMG, LOOSE_IMG, \
                            BACKPACK_HOME_IMG, BACKPACK_WIN_IMG, WIN_IMG, \
@@ -43,10 +25,10 @@ from Data.constants import ICON_IMG, TITLE, Y_SIZE_WINDOW, X_SIZE_WINDOW, \
                            MAC_WAV
 
 # Import the structure and settings of the labyrinth
-from Data.labyrinth import Labyrinth
+from Data.maze import Maze
 
 # Import the caracterics of positions and moves of characters
-from Data.character import Character
+from Data.sprite import Sprite
 # Initialization of Pygame's modules
 pygame.init()
 

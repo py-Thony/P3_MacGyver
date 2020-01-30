@@ -44,7 +44,7 @@ TITLE = " Aidez MacGyver à s'échapper du labyrinthe !"
 ICON_IMG = "pics/icon.png"
 
 # Variables needed to calculate dimensions (window, sprite)
-SPRITE_NUMB_SIDE = 15
+SPRITE_NUMBER_SIDE = 15
 SPRITE_SIDE_SIZE = 40
 Y_SIZE_WINDOW = 600
 X_SIZE_WINDOW = 640 
@@ -82,6 +82,7 @@ BACK_IMG = "pics/BACK_IMG.png"
 DRAW_FILE = "Data/draw_file"
 
 # sprites images
+
 MAC_IMG = "pics/Mac.png"
 GUARDIAN_IMG = "pics/Guardian.png"
 TOILET_TUBE_IMG = "pics/toilet_tube.png"

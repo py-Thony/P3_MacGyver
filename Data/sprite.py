@@ -8,79 +8,76 @@ from Data.constants import SPRITE_NUMB_SIDE, SPRITE_SIDE_SIZE, MAC_IMG, ONE_ITEM
     TWO_ITEMS_IMG, THREE_ITEMS_IMG, ALCOHOL_IMG, NEEDLE_IMG, TOILET_TUBE_IMG, SYRINGE_IMG, \
     BACKPACK_IMG, ALL_ITEMS_IMG, WAV_ALL_ITEMS, WAV_CATCH_ITEM
 
-class Character:
+
+
+##################################
+##################################
+##################################
+
+
+class Sprite:
     """
-    Class to create the characters whith name,
-    initial position, valid moves and catch items.
+    Class to create the sprites
     """
-     
-    def __init__(self, name, structure, position):
-        """ It does not seem useful to me to comment on these lines because it seems obvious to me but:
-                    - self defines the variable instead of the argument of the definition.
-                    - name, structure, position, case, backpack, picture, pygame
-                      express what they correspond to.
-                    - backpack = () is an 'empty' tuple, a tuple cannot be modified,
-                      it will therefore be replaced by a new tuple (with the same name to overwrite it)
-                      as it evolves in the program.
-        """
-        self.name = name
-        self.position = position
-        self.structure = structure
-        self.case_y = position[0]
-        self.case_x = position[1]
-        backpack = ()
-        self.backpack = backpack
-        self.structure[self.case_y][self.case_x] = "M"
-        self.picture = pygame.image.load(MAC_IMG).convert_alpha()
-        self.x = self.case_x * SPRITE_SIDE_SIZE
-        self.y = self.case_y * SPRITE_SIDE_SIZE
+    #         backpack = ()
+    #    self.backpack = backpack
         
-    def move(self, direction):
+
+    def __init__(self, sprite_name, sprite_letter, sprite_position, sprite_image, maze_structure):
+
+        self.sprite_name = sprite_name[0]
+
+        self.maze_structure = maze_structure
+
+        self.sprite_position = sprite_position
+        self.sprite_position_y = sprite_position[0]
+        self.sprite_position_x = sprite_position[1]
+        
+        self.maze_structure[self.sprite_position_y][self.sprite_position_x] = sprite_letter
+        
+        self.sprite_image = sprite_image 
+        
+        self.sprite_position_x = self.sprite_position_x * SPRITE_SIDE_SIZE
+        self.sprite_position_y = self.sprite_position_y * SPRITE_SIDE_SIZE
+
+    
+
+    def move_sprite(self, sprite_direction):
+
         """
-        Method that defines the action of moving the character.
-                - We take the width or height of the labyrinth (represented via
-                  the number of cases, 15 cases == 15 sprites == width or height)
-                - We recover the value of the 'next cases' and we verify that it does not
-                  it's not a wall.
-                - If movement is authorized, it is validated
+        Method that defines the action of moving the sprite
+
         """
+        # BEFORE MODIFYING, or for understanding:
+        #           See 'Particular_things_move.txt' in the 'Notes' folder 
+        #           for all informations about this list comprehension.
+        self.sprite_direction = sprite_direction
+        self.sprite_direction == [ 
 
-        # Just explain for the first (right)
+                [
+                
+                    self.next_position for self.next_position in 
 
-        # If direction == condition verified
-        if direction == "right":  
-            # If needed position is in the limits of number of sprite
-            """
-            -1 because we count from zero, 
-            so if we are on box 0 and we count 15, 
-            we end up on box 16
-            """        
-            if self.case_y < (SPRITE_NUMB_SIDE - 1):
-                # If the next box is NOT a wall
-                if self.structure[self.case_y +1][self.case_x] != "w":
-                    # Accept the move
-                    self.case_y += 1
-                    # Move with width of a sprite
-                    self.y = self.case_y * SPRITE_SIDE_SIZE            
-  
-        if direction == "left":
-            if self.case_y > 0:
-                if self.structure[self.case_y -1][self.case_x] != "w":
-                    self.case_y -= 1
-                    self.y = self.case_y * SPRITE_SIDE_SIZE
-                  
-        if direction == "up": 
-            if self.case_x > 0:
-                if self.structure[self.case_y][self.case_x -1] != "w":
-                    self.case_x -= 1
-                    self.x = self.case_x * SPRITE_SIDE_SIZE
-                   
+                        ( 
+        
+                        self.maze_structure[self.sprite_position_y][self.sprite_position_x] > 0 
+        
+                        and
 
-        if direction == "down":
-            if self.case_x < (SPRITE_NUMB_SIDE - 1):
-                if self.structure[self.case_y][self.case_x +1] != "w":             
-                    self.case_x += 1
-                    self.x = self.case_x * SPRITE_SIDE_SIZE         
+                        self.maze_structure[self.sprite_position_y][self.sprite_position_x] < SPRITE_NUMBER_SIZE
+
+                        )
+                ]
+
+                for self.maze_struture in labyrinth
+            
+            ]
+            
+
+##################################
+##################################
+##################################      
+       
 
 
     def catch_sound(self):
